@@ -8,7 +8,7 @@ import os
 class PDFMergerGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("PDF 合併工具（高互動拖曳視覺版 by 丘丘）")
+        self.root.title("PDF 合併工具")
         self.root.geometry("1000x500")  # 視窗預設大小加大兩倍
         self.file_list = []
         self.thumbnails = []
