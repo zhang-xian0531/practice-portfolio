@@ -1,0 +1,67 @@
+# ======================
+# 🐍 Python 專案忽略項目
+# ======================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+*.log
+*.sqlite3
+*.db
+dist/
+build/
+env/
+venv/
+.venv/
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ======================
+# 🟢 Node.js 專案忽略項目
+# ======================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.pnpm-debug.log
+
+# ======================
+# 🔐 機密設定
+# ======================
+.env
+.env.local
+.env.*.local
+
+# ======================
+# 💻 VS Code 編輯器
+# ======================
+.vscode/
+*.code-workspace
+
+# ======================
+# 🖥️ 作業系統產物
+# ======================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# ======================
+# 🧪 測試覆蓋報告與暫存
+# ======================
+coverage/
+coverage-final.json
+.nyc_output/
+.cache/
+.tox/
+.pytest_cache/
+
+# ======================
+# 🚫 Git 忽略檔本身也可以忽略的舊備份
+# ======================
+.gitignore~
