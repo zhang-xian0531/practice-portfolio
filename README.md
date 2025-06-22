@@ -5,6 +5,13 @@
 
 ---
 
+# 🧰 Practice Portfolio
+
+Hi! I'm jangsain, a beginner developer focusing on Python and JavaScript.  
+This repo showcases my hands-on practice projects as I work towards becoming a remote freelancer 🚀
+
+---
+
 ## 📁 專案列表
 
 | 專案名稱                | 說明                                 | 技術   |
@@ -14,38 +21,6 @@
 | **PDF Merger**         | 合併多份 PDF 文件的 CLI 工具          | Python |
 | **Text Saver CLI**     | 可將輸入文字存成檔案的命令列小工具      | Python |
 | **Countdown Timer**    | 簡易 HTML 倒數計時器，支援自訂時間      | HTML/JavaScript |
-
----
-
-## 🧑‍💻 我的技能
-
-- 🐍 Python CLI 工具撰寫與檔案處理
-- 🧾 JSON / 檔案輸入輸出
-- 🖥 HTML + JavaScript 小應用開發
-- 🧠 Git/GitHub 基本操作與版本控制
-
----
-
-## 🧿 我的目標
-
-目前我正在準備遠端接案，持續強化開發能力中。  
-如果你對我的作品有興趣，或願意給我一些指導與機會，歡迎與我聯絡！
-
----
-
-## 📬 聯絡我
-
-- GitHub：[@zhang-xian0531](https://github.com/zhang-xian0531)
-- Email：y2andb3anda4@gmail.com
-
-感謝你閱讀這份 README！
-
---------------------------------------------------------------------------------------------------------
-
-# 🧰 Practice Portfolio
-
-Hi! I'm jangsain, a beginner developer focusing on Python and JavaScript.  
-This repo showcases my hands-on practice projects as I work towards becoming a remote freelancer 🚀
 
 ---
 
@@ -61,6 +36,15 @@ This repo showcases my hands-on practice projects as I work towards becoming a r
 
 ---
 
+## 🧑‍💻 我的技能
+
+- 🐍 Python CLI 工具撰寫與檔案處理
+- 🧾 JSON / 檔案輸入輸出
+- 🖥 HTML + JavaScript 小應用開發
+- 🧠 Git/GitHub 基本操作與版本控制
+
+---
+
 ## 🧑‍💻 My Skills
 
 - 🐍 Python CLI tool development and file handling
@@ -70,10 +54,26 @@ This repo showcases my hands-on practice projects as I work towards becoming a r
 
 ---
 
+## 🧿 我的目標
+
+目前我正在準備遠端接案，持續強化開發能力中。  
+如果你對我的作品有興趣，或願意給我一些指導與機會，歡迎與我聯絡！
+
+---
+
 ## 🧿 My Goal
 
 I'm currently preparing to work as a remote freelancer while improving my development skills.  
 If you're interested in my work or open to providing guidance or opportunities, feel free to contact me!
+
+---
+
+## 📬 聯絡我
+
+- GitHub：[@zhang-xian0531](https://github.com/zhang-xian0531)
+- Email：y2andb3anda4@gmail.com
+
+感謝你閱讀這份 README！
 
 ---
 
