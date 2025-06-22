@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>自訂倒數計時器</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+      background-color: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 30px;
+    }
+    .timer-select {
+      display: inline-flex;
+      gap: 10px;
+      padding: 20px;
+      background-color: #e0e0e0;
+      border-radius: 10px;
+      justify-content: center;
+      align-items: flex-end;
+      width: 600px;
+      height: 150px;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+    .time-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .label {
+      margin-bottom: 5px;
+      background-color: black;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-size: 18px;
+    }
+    .time-controls {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .time-controls input {
+      font-size: 90px; 
+      text-align: center;
+      width: 120px;     
+      height: 80px;     
+      line-height: 80px; 
+    }
+
+    .time-controls button {
+      font-size: 28px;
+      width: 40px;
+      height: 40px;
+      line-height: 30px;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+    }
+    .separator {
+      font-size: 90px;
+      padding: 0 5px;
+      height: 80px;
+      line-height: 80px;
+    }
+    .negative-sign {
+      font-size: 32px;
+      color: orange;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60px;
+    }
+    .countdown-view {
+      font-size: 90px;
+      color: white;
+      background-color: black;
+      padding: 20px;
+      border-radius: 10px;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      width: 600px;
+      height: 140px;
+      box-sizing: border-box;
+    }
+    @keyframes flash {
+      0% { opacity: 1; }
+      50% { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
+    .overdue {
+      color: orange;
+      animation: flash 1s infinite;
+    }
+    button.control {
+      font-size: 20px;
+      padding: 10px 20px;
+      margin: 20px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .start-btn { background-color: #1976d2; color: white; }
+    .pause-btn { background-color: #ffca28; color: black; }
+    .resume-btn { background-color: #66bb6a; color: white; }
+    .cancel-btn { background-color: #b0bec5; color: black; }
+    .stop-btn { background-color: #e53935; color: white; }
+  </style>
+</head>
+<body>
+
+  <h1>倒數計時器</h1>
+  <div class="timer-select" id="timerDisplay">
+    <div id="negativeSign" class="negative-sign" style="display:none;">−</div>
+    <div class="time-block">
+      <div class="label">時</div>
+      <div class="time-controls">
+        <input id="hoursInput" type="number" value="00" maxlength="2" min="0" onfocus="this.select()" oninput="handleInput(this)" />
+      </div>
+    </div>
+    <div class="separator">:</div>
+    <div class="time-block">
+      <div class="label">分</div>
+      <div class="time-controls">
+        <input id="minutesInput" type="number" value="00" maxlength="2" min="0" max="59" onfocus="this.select()" oninput="handleInput(this)" />
+      </div>
+    </div>
+    <div class="separator">:</div>
+    <div class="time-block">
+      <div class="label">秒</div>
+      <div class="time-controls">
+        <input id="secondsInput" type="number" value="00" maxlength="2" min="0" max="59" onfocus="this.select()" oninput="handleInput(this)" />
+      </div>
+    </div>
+  </div>
+
+  <div id="countdownView" class="countdown-view"></div>
+
+  <div>
+    <button id="toggleBtn" class="control start-btn" onclick="toggleCountdown()">開始</button>
+    <button class="control cancel-btn" onclick="cancelCountdown()">取消</button>
+  </div>
+
+  <audio id="pikaSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_d788fe2e41.mp3?filename=game-notification-1-147766.mp3"></audio>
+
+  <script>
+    let timer;
+    let isPaused = false;
+    let isRunning = false;
+    let targetTime;
+    let originalMs;
+    let originalInputs = {};
+
+    function handleInput(el) {
+      el.value = el.value.replace(/[^\d]/g, '').slice(-2).padStart(2, '0');
+    }
+
+    function adjustTime(id, delta) {
+      const input = document.getElementById(id);
+      let val = parseInt(input.value) || 0;
+      val = Math.max(0, val + delta);
+      if (id !== 'hoursInput') val = Math.min(59, val);
+      input.value = String(val).padStart(2, '0');
+    }
+
+    function toggleCountdown() {
+      const btn = document.getElementById("toggleBtn");
+      if (!isRunning) {
+        const h = parseInt(document.getElementById("hoursInput").value) || 0;
+        const m = parseInt(document.getElementById("minutesInput").value) || 0;
+        const s = parseInt(document.getElementById("secondsInput").value) || 0;
+        originalInputs = { h, m, s };
+        originalMs = (h * 3600 + m * 60 + s) * 1000;
+        if (originalMs <= 0) {
+          alert("請設定一個有效的時間。");
+          return;
+        }
+        targetTime = Date.now() + originalMs;
+        document.getElementById("timerDisplay").style.display = "none";
+        document.getElementById("countdownView").style.display = "flex";
+        btn.textContent = "暫停";
+        btn.className = "control pause-btn";
+        isRunning = true;
+        isPaused = false;
+        updateCountdown();
+        timer = setInterval(updateCountdown, 1000);
+      } else if (isPaused) {
+        targetTime = Date.now() + originalMs;
+        timer = setInterval(updateCountdown, 1000);
+        btn.textContent = "暫停";
+        btn.className = "control pause-btn";
+        isPaused = false;
+      } else if (btn.textContent === "停止") {
+        cancelCountdown();
+      } else {
+        clearInterval(timer);
+        btn.textContent = "繼續";
+        btn.className = "control resume-btn";
+        isPaused = true;
+        originalMs = targetTime - Date.now();
+      }
+    }
+
+    function updateCountdown() {
+      const now = Date.now();
+      let remaining = targetTime - now;
+      let overdue = false;
+      if (remaining < 0) {
+        overdue = true;
+        remaining = -remaining;
+        document.getElementById("toggleBtn").textContent = "停止";
+        document.getElementById("toggleBtn").className = "control stop-btn";
+        document.getElementById("pikaSound").play();
+      }
+
+      const hrs = Math.floor(remaining / 3600000);
+      const mins = Math.floor((remaining % 3600000) / 60000);
+      const secs = Math.floor((remaining % 60000) / 1000);
+      const timeStr = `${overdue ? '-' : ''}${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+      const view = document.getElementById("countdownView");
+      view.textContent = timeStr;
+      view.className = overdue ? "countdown-view overdue" : "countdown-view";
+    }
+
+    function cancelCountdown() {
+      clearInterval(timer);
+      document.getElementById("countdownView").style.display = "none";
+      document.getElementById("timerDisplay").style.display = "flex";
+      document.getElementById("toggleBtn").textContent = "開始";
+      document.getElementById("toggleBtn").className = "control start-btn";
+      document.getElementById("hoursInput").value = String(originalInputs.h || 0).padStart(2, '0');
+      document.getElementById("minutesInput").value = String(originalInputs.m || 0).padStart(2, '0');
+      document.getElementById("secondsInput").value = String(originalInputs.s || 0).padStart(2, '0');
+      isRunning = false;
+      isPaused = false;
+    }
+  </script>
+</body>
+</html>
